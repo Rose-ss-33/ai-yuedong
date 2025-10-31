@@ -1,0 +1,26 @@
+# Node/Next artifacts
+node_modules
+.next
+npm-debug.log
+.yarn
+.pnpm-store
+
+# Python virtual environments and caches
+backend/venv
+backend/venv312
+**/__pycache__/
+*.pyc
+
+# Build outputs
+build
+dist
+out
+
+# Git & VCS
+.git
+.gitignore
+.gitattributes
+
+# Misc
+.DS_Store
+public-server.js
