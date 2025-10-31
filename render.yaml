@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: ai-yuedong-backend
+    env: python
+    rootDir: backend
+    autoDeploy: true
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /
+    envVars:
+      - key: JR_MODEL
+        value: yolov8n-pose.pt
