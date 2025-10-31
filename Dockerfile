@@ -17,6 +17,8 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 # Copy backend code (includes model file if present in backend/)
 COPY backend /app/backend
+# Copy model from project root into backend image to avoid runtime download
+COPY yolov8n-pose.pt /app/backend/yolov8n-pose.pt
 
 # Default port for Spaces; platform will inject PORT
 ENV PORT=7860
