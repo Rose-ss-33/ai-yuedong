@@ -1,0 +1,33 @@
+[build]
+  publish = "public"
+  command = ""
+  functions = "netlify/functions"
+
+[dev]
+  publish = "public"
+
+# 可选：为 /api/* 映射到 Netlify Functions（若未使用 public/_redirects）
+[[redirects]]
+  from = "/api/adopt"
+  to = "/.netlify/functions/adopt"
+  status = 200
+[[redirects]]
+  from = "/api/login"
+  to = "/.netlify/functions/login"
+  status = 200
+[[redirects]]
+  from = "/api/register"
+  to = "/.netlify/functions/register"
+  status = 200
+[[redirects]]
+  from = "/api/reset-stats"
+  to = "/.netlify/functions/reset-stats"
+  status = 200
+[[redirects]]
+  from = "/api/stats"
+  to = "/.netlify/functions/stats"
+  status = 200
+[[redirects]]
+  from = "/api/analyze"
+  to = "/.netlify/functions/analyze"
+  status = 200

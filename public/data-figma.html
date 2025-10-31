@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>历史数据 · 跃动分析</title>
+  <link rel="stylesheet" href="/figma.css">
+  <style>
+    /* 历史数据页面特定样式：沿用全局 Figma 风格，对齐 448px 画板 */
+    .main-content { /* 不再使用，改为 container.narrow */ }
+
+    /* 数据概览卡片样式（统一为全站 card 风格） */
+    .data-overview {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .data-card {
+      /* 统一 Figma 卡片风格 */
+      background: var(--white);
+      border: 1px solid var(--zinc-200);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
+      text-align: center;
+      position: relative;
+    }
+    .data-card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 8px;
+      font-size: 20px;
+    }
+    .data-card-value {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 6px;
+      color: #0f172a;
+    }
+    .data-card-label {
+      font-size: 14px;
+      color: #6B7280;
+      font-weight: 500;
+    }
+
+    /* 趋势图表区域（统一卡片样式） */
+    .trend-chart.card.padded { margin-bottom: 20px; }
+    .chart-tabs {
+      display: flex;
+      background: #F3F4F6;
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 16px;
+      border: 1px solid var(--zinc-200);
+    }
+    .chart-tab {
+      flex: 1;
+      text-align: center;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #475569;
+    }
+    .chart-tab.active {
+      background: #FFFFFF;
+      color: var(--primary-600);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--zinc-200);
+    }
+    .chart-container {
+      height: 200px;
+      background: linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%);
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 响应式调整 */
+    @media (max-width: 480px) {
+      .data-overview { grid-template-columns: 1fr; gap: 10px; }
+      .data-card { padding: 14px; }
+      .data-card-value { font-size: 22px; }
+    }
+    @media (min-width: 481px) and (max-width: 768px) {
+      .data-overview { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- 顶部导航栏（严格还原 Figma） -->
+    <div class="topbar">
+      <div class="topbar-inner">
+        <button class="icon-btn" onclick="history.length>1?history.back():location.href='/home-figma.html'" title="返回/首页">←</button>
+        <div class="title">历史数据</div>
+        <button class="pill" id="clearBtn" title="清空记录">🗑 清空</button>
+      </div>
+    </div>
+
+    <!-- 主内容区域（使用窄容器以对齐 448px 画板） -->
+    <main class="container narrow page">
+      <!-- 数据概览三卡 -->
+      <div class="data-overview">
+        <div class="data-card card padded">
+          <div class="data-card-icon" style="background: var(--blue-100); color: #1D4ED8;">🔢</div>
+          <div class="data-card-value" id="totalCount">12,580</div>
+          <div class="data-card-label">总跳绳次数</div>
+        </div>
+        <div class="data-card card padded">
+          <div class="data-card-icon" style="background: #FEF3C7; color: #D97706;">⏱️</div>
+          <div class="data-card-value" id="avgScore">8.2</div>
+          <div class="data-card-label">近30天平均</div>
+        </div>
+        <div class="data-card card padded">
+          <div class="data-card-icon" style="background: var(--green-100); color: #065F46;">📊</div>
+          <div class="data-card-value" id="completionRate">85%</div>
+          <div class="data-card-label">本周计划完成度</div>
+        </div>
+      </div>
+
+      <!-- 趋势图表区域 -->
+      <div class="trend-chart card padded">
+        <div class="chart-tabs">
+          <div class="chart-tab active" data-metric="count">次数趋势</div>
+          <div class="chart-tab" data-metric="score">动作评分</div>
+          <div class="chart-tab" data-metric="duration">训练时长</div>
+        </div>
+        <div class="chart-container" id="chartBox">
+          <svg id="chart" width="100%" height="100%" viewBox="0 0 600 200" preserveAspectRatio="none"></svg>
+        </div>
+      </div>
+    </main>
+
+    <!-- 底部导航（统一样式） -->
+    <div class="tabbar">
+      <div class="tabbar-inner" aria-label="底部导航">
+        <a class="tab" href="/home-figma.html" aria-label="首页">
+          <div class="icon" aria-hidden="true"><img src="/icons/nav-home.svg" alt="" /></div>
+          <span class="label">首页</span>
+        </a>
+        <a class="tab" href="/analysis-figma.html" aria-label="分析">
+          <div class="icon" aria-hidden="true"><img src="/icons/nav-analysis.svg" alt="" /></div>
+          <span class="label">分析</span>
+        </a>
+        <a class="tab" href="/plan-figma.html" aria-label="计划">
+          <div class="icon" aria-hidden="true"><img src="/icons/nav-plan.svg" alt="" /></div>
+          <span class="label">计划</span>
+        </a>
+        <a class="tab active" href="/data-figma.html" aria-label="数据">
+          <div class="icon" aria-hidden="true"><img src="/icons/nav-data.svg" alt="" /></div>
+          <span class="label">数据</span>
+        </a>
+        <a class="tab" href="/achievements-figma.html" aria-label="成就" data-dot="true">
+          <div class="icon" aria-hidden="true"><img src="/icons/nav-achievements.svg" alt="" /></div>
+          <span class="label">成就</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const KEY = 'jump_records'
+    const listEl = document.getElementById('recordList')
+    const sumCountEl = document.getElementById('sumCount')
+    const sumDurationEl = document.getElementById('sumDuration')
+    const lastInfoEl = document.getElementById('lastInfo')
+    // 数据概览元素
+    const totalCountEl = document.getElementById('totalCount');
+    const avgScoreEl = document.getElementById('avgScore');
+    const completionRateEl = document.getElementById('completionRate');
+    const clearBtn = document.getElementById('clearBtn');
+
+    // 图表相关元素
+    const chartEl = document.getElementById('chart');
+    const chartBox = document.getElementById('chartBox');
+    let currentMetric = 'count';
+    
+    // 图表标签切换功能
+    const chartTabs = document.querySelectorAll('.chart-tab');
+    chartTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        chartTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentMetric = tab.dataset.metric;
+        renderChart();
+      });
+    });
+
+    // 删除样本数据：改为使用分析页写入的 jump_records
+    const getRecords = () => {
+      const list = JSON.parse(localStorage.getItem(KEY) || '[]');
+      return list.sort((a,b)=> (a.ts||0) - (b.ts||0));
+    };
+    const fmtDay = (ts) => {
+      const d = new Date(ts);
+      const m = String(d.getMonth()+1).padStart(2,'0');
+      const da = String(d.getDate()).padStart(2,'0');
+      return `${m}/${da}`;
+    };
+    const getDailySeries = (metric) => {
+      const recs = getRecords();
+      const map = new Map(); // key: yyyy-mm-dd -> {sumCount,sumDuration,sumScore}
+      for (const r of recs) {
+        const d = new Date(r.ts||Date.now());
+        const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        const prev = map.get(key) || { count:0, duration:0, score:0, n:0 };
+        const score = Number(r.score10 ?? (r.symmetry_score||0)/10) || 0;
+        map.set(key, { count: prev.count + (Number(r.count)||0), duration: prev.duration + (Number(r.duration)||0), score: prev.score + score, n: prev.n + 1 });
+      }
+      const series = Array.from(map.entries()).sort((a,b)=> a[0].localeCompare(b[0])).map(([key,val])=>{
+        const dayTs = new Date(key).getTime();
+        const value = metric==='count' ? val.count : metric==='duration' ? val.duration : (val.n ? (val.score/val.n) : 0);
+        return { date: fmtDay(dayTs), value };
+      });
+      return series;
+    };
+
+    // 渲染图表（根据 jump_records 聚合日序列）
+    function renderChart() {
+      if (!chartEl) return;
+      
+      const W = 600, H = 200, PAD_Y = 30, PAD_X = 50;
+      const baseY = H - PAD_Y;
+      
+      chartEl.innerHTML = '';
+      
+      // 创建渐变背景
+      const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+      const grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+      grad.setAttribute('id', 'areaGrad');
+      grad.setAttribute('x1', '0'); grad.setAttribute('y1', '0');
+      grad.setAttribute('x2', '0'); grad.setAttribute('y2', '1');
+      
+      const s1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+      s1.setAttribute('offset', '0%'); s1.setAttribute('stop-color', '#93c5fd'); s1.setAttribute('stop-opacity', '0.35');
+      const s2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+      s2.setAttribute('offset', '100%'); s2.setAttribute('stop-color', '#93c5fd'); s2.setAttribute('stop-opacity', '0.05');
+      
+      grad.appendChild(s1); grad.appendChild(s2);
+      defs.appendChild(grad);
+      chartEl.appendChild(defs);
+
+      // 绘制坐标轴
+      const axisX = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      axisX.setAttribute('x1', String(PAD_X)); axisX.setAttribute('x2', String(W - PAD_X));
+      axisX.setAttribute('y1', String(baseY)); axisX.setAttribute('y2', String(baseY));
+      axisX.setAttribute('stroke', '#c7d2fe'); axisX.setAttribute('stroke-width', '1.5');
+      chartEl.appendChild(axisX);
+
+      const axisY = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      axisY.setAttribute('x1', String(PAD_X)); axisY.setAttribute('x2', String(PAD_X));
+      axisY.setAttribute('y1', String(PAD_Y)); axisY.setAttribute('y2', String(baseY));
+      axisY.setAttribute('stroke', '#c7d2fe'); axisY.setAttribute('stroke-width', '1.5');
+      chartEl.appendChild(axisY);
+
+      // 从记录聚合数据
+      const series = getDailySeries(currentMetric);
+      const values = series.map(s=> s.value);
+      const dates = series.map(s=> s.date);
+      const n = values.length;
+      
+      if (n === 0) {
+        const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        txt.setAttribute('x', String(W / 2));
+        txt.setAttribute('y', String(H / 2));
+        txt.setAttribute('text-anchor', 'middle');
+        txt.setAttribute('fill', '#9ca3af');
+        txt.setAttribute('font-size', '12');
+        txt.textContent = '暂无数据';
+        chartEl.appendChild(txt);
+        return;
+      }
+
+      // 计算坐标范围
+      const maxValue = Math.max(...values);
+      const minValue = Math.min(...values);
+      const range = maxValue - minValue || 1;
+      
+      const X = (i) => PAD_X + (n===1? (W-2*PAD_X)/2 : i * (W - 2 * PAD_X) / (n - 1));
+      const Y = (v) => baseY - ((v - minValue) / range) * (H - 2 * PAD_Y);
+
+      // 绘制网格线
+      const gridCount = 4;
+      for (let i = 0; i <= gridCount; i++) {
+        const y = PAD_Y + i * (H - 2 * PAD_Y) / gridCount;
+        const grid = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        grid.setAttribute('x1', String(PAD_X));
+        grid.setAttribute('x2', String(W - PAD_X));
+        grid.setAttribute('y1', String(y));
+        grid.setAttribute('y2', String(y));
+        grid.setAttribute('stroke', '#eef2ff');
+        grid.setAttribute('stroke-width', '1');
+        chartEl.appendChild(grid);
+      }
+
+      // 绘制折线
+      let pathData = '';
+      values.forEach((v, i) => {
+        const x = X(i);
+        const y = Y(v);
+        pathData += (i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`);
+      });
+
+      // 绘制区域填充
+      if (n > 1) {
+        const areaData = pathData + ` L ${X(n - 1)} ${baseY} L ${X(0)} ${baseY} Z`;
+        const area = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        area.setAttribute('d', areaData);
+        area.setAttribute('fill', 'url(#areaGrad)');
+        area.setAttribute('stroke', 'none');
+        chartEl.appendChild(area);
+      }
+
+      // 绘制折线
+      if (n > 1) {
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', pathData);
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', '#2563eb');
+        path.setAttribute('stroke-width', '2');
+        chartEl.appendChild(path);
+      }
+
+      // 绘制数据点
+      values.forEach((v, i) => {
+        const x = X(i);
+        const y = Y(v);
+        
+        // 数据点
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', String(x));
+        circle.setAttribute('cy', String(y));
+        circle.setAttribute('r', '4');
+        circle.setAttribute('fill', '#2563eb');
+        circle.setAttribute('stroke', '#ffffff');
+        circle.setAttribute('stroke-width', '2');
+        chartEl.appendChild(circle);
+
+        // 日期标签
+        const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        label.setAttribute('x', String(x));
+        label.setAttribute('y', String(H - 8));
+        label.setAttribute('text-anchor', 'middle');
+        label.setAttribute('fill', '#6b7280');
+        label.setAttribute('font-size', '10');
+        label.setAttribute('font-weight', '500');
+        label.textContent = dates[i];
+        chartEl.appendChild(label);
+      });
+    }
+
+    // 初始化页面：根据分析结果填充数据
+    function initPage() {
+      const recs = getRecords();
+      const sum = (arr, f) => arr.reduce((s,x)=> s + (f(x)||0), 0);
+      const avg = (arr, f) => { const vals = arr.map(f).filter(v=> Number.isFinite(v)); return vals.length ? (vals.reduce((a,b)=>a+b,0)/vals.length) : 0; };
+      // 总次数
+      const totalCount = sum(recs, r=> Number(r.count)||0);
+      totalCountEl.textContent = (totalCount||0).toLocaleString();
+      // 平均评分（10分制）
+      const avgScore = avg(recs, r=> Number(r.score10 ?? (r.symmetry_score||0)/10) || 0);
+      avgScoreEl.textContent = avgScore.toFixed(1);
+      // 本周训练达成率（过去7天，有记录的天数/7）
+      const now = new Date();
+      const days = [...Array(7)].map((_,i)=> { const d = new Date(now); d.setDate(d.getDate() - i); d.setHours(0,0,0,0); return d; });
+      const dayHasRecord = (d) => recs.some(r=> { const t = new Date(r.ts||Date.now()); t.setHours(0,0,0,0); return t.getTime() === d.getTime(); });
+      const reached = days.filter(dayHasRecord).length;
+      const completionRate = Math.round((reached/7)*100);
+      completionRateEl.textContent = `${completionRate}%`;
+      
+      // 渲染图表
+      renderChart();
+    }
+
+    // 清空记录功能（清除本地记录并尝试调用后端重置）
+    clearBtn.addEventListener('click', async () => {
+      if (confirm('确定清空所有分析记录吗？')) {
+        try { localStorage.removeItem(KEY); } catch {}
+        try { await fetch('/api/reset-stats', { method: 'POST' }); } catch {}
+        initPage();
+      }
+    });
+
+    // 页面加载时检查登录状态
+    document.addEventListener('DOMContentLoaded', function() {
+      const user = localStorage.getItem('user');
+      if (!user) {
+        window.location.href = 'login-figma.html';
+      } else {
+        initPage();
+      }
+    });
+  </script>
+</body>
+</html>

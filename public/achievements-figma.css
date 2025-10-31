@@ -1,0 +1,133 @@
+/* Figma Achievements Interface — responsive static CSS */
+:root{
+  --bg:#f4f5f7; --ink:#0f172a; --muted:#64748b; --line:#e5e7eb;
+  --primary:#2563eb; --primary-weak:#e0e7ff; --ring:#4f46e5;
+  --yellow:#fef9c3; --blue:#e0f2fe; --purple:#ede9fe; --teal:#d1fae5; --gray:#f8fafc;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif}
+
+.page{padding:16px;min-height:100vh}
+.topbar{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.back{width:32px;height:32px;border-radius:999px;background:#e5e7eb;border:0;cursor:pointer}
+.title{font-size:18px;font-weight:600}
+.actions{margin-left:auto;display:flex;align-items:center;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;text-decoration:none;font-weight:600}
+.btn-primary{background:#fde047;color:#1f2937}
+.btn-ghost{background:#e5e7eb;color:#374151}
+
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+@media (max-width:520px){.stat-row{grid-template-columns:1fr}}
+.card{background:#fff;border-radius:14px;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.card .num{font-size:22px;font-weight:700}
+.card .lab{margin-top:2px;color:var(--muted)}
+
+.tabs{display:flex;gap:8px;margin:10px 0 14px}
+/* 将原 .tab 改为 .tab-pill，避免与全站 BottomNav .tab 冲突 */
+.tab-pill{position:relative;background:#f1f5f9;color:#334155;border:0;border-radius:999px;padding:6px 12px;cursor:pointer}
+.tab-pill.active{background:var(--primary-weak);color:var(--primary)}
+.tab-pill .indicator{position:absolute;bottom:-2px;left:50%;transform:translateX(-50%);width:32px;height:3px;background:var(--primary);border-radius:999px}
+
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media (min-width:560px){.grid{grid-template-columns:repeat(3,1fr)}}
+.badge{position:relative;border-radius:16px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,.08);display:flex;align-items:center;gap:10px;min-height:90px}
+.badge.yellow{background:var(--yellow)}
+.badge.blue{background:var(--blue)}
+.badge.purple{background:var(--purple)}
+.badge.teal{background:var(--teal)}
+.badge.gray{background:var(--gray)}
+/* 仅限制成就卡片内部图标，避免影响底部导航的 .icon */
+.badge .icon{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#f8fafc,#e5e7eb);flex:0 0 auto}
+.meta{flex:1}
+.h1{font-size:15px;font-weight:600}
+.h1.purple{color:#6d28d9}
+.h1.blue{color:#2563eb}
+.h1.teal{color:#0f766e}
+.h1.yellow{color:#92400e}
+.sub{margin-top:2px;color:var(--muted)}
+.progress{position:absolute;right:10px;bottom:10px}
+.ring{width:52px;height:52px;border-radius:999px;display:grid;place-items:center}
+.ring-hole{width:40px;height:40px;background:#fff;border-radius:999px;box-shadow:inset 0 0 0 2px rgba(15,23,42,.05)}
+.ring-text{position:absolute;font-size:12px;font-weight:600}
+
+.footer{margin-top:24px;color:var(--muted);font-size:12px}
+
+/* 我的成就页（更贴近 Figma UI） */
+.section { margin: 16px 0; }
+
+/* 顶部英雄卡（等级 + 经验进度） */
+.achv-hero {
+  border-radius: 20px;
+  padding: 20px;
+  color: #0b1220;
+  background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+  border: 1px solid #dbeafe;
+  box-shadow: 0 8px 18px rgba(59, 130, 246, 0.12);
+}
+.achv-hero .level { font-size: 18px; font-weight: 700; }
+.achv-hero .subtitle { font-size: 12px; color: #475569; margin-top: 4px; }
+.achv-hero .bar {
+  margin-top: 12px;
+  height: 12px; border-radius: 999px; overflow: hidden;
+  background: #cbd5e1;
+}
+.achv-hero .bar .fill { height: 100%; width: 58%; background: linear-gradient(90deg, #60a5fa, #34d399); }
+.achv-hero .stats { margin-top: 12px; display: flex; gap: 10px; }
+.achv-hero .stats .pill { flex: 1; display: flex; align-items: center; justify-content: center; padding: 8px 10px; border-radius: 12px; font-size: 12px; color: #334155; background: #f1f5f9; border: 1px solid #e2e8f0; }
+
+/* 分类标签（胶囊切换） */
+.tabs { display:flex; gap: 8px; flex-wrap: wrap; }
+.tab-pill { padding: 8px 12px; border-radius: 14px; font-size: 12px; background: #f8fafc; color: #334155; border: 1px solid #e5e7eb; cursor: pointer; }
+.tab-pill.active { background: #eef2ff; border-color: #c7d2fe; color: #2563eb; }
+
+/* 成就网格 */
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.badge {
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+  padding: 14px;
+}
+.badge .row { display:flex; justify-content: space-between; align-items: center; }
+.badge .title { font-size: 14px; font-weight: 600; color: #0f172a; }
+.badge .desc { font-size: 12px; color: #475569; margin-top: 6px; }
+.badge .progress { margin-top: 10px; height: 8px; border-radius: 999px; background: #f1f5f9; overflow: hidden; }
+.badge .progress .fill { height: 100%; background: #60a5fa; width: var(--p, 0%); }
+
+/* 近期可解锁 */
+.next-list { display:grid; gap: 10px; }
+.next-item { display:flex; align-items:center; gap: 10px; padding: 10px; border-radius: 12px; border: 1px solid #e5e7eb; background: #ffffff; }
+.next-item .icon { font-size: 20px; }
+.next-item .name { font-size: 13px; font-weight: 600; color: #0f172a; }
+.next-item .hint { font-size: 12px; color: #475569; }
+
+/* 响应式 */
+@media (min-width: 768px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+
+/* 成就系统（分类分组 + 渐变头部 + 列表卡片） */
+.achv-section { margin: 16px 0; }
+.achv-head { border-radius: 16px; padding: 12px 14px; color:#fff; box-shadow: 0 8px 18px rgba(0,0,0,.12); background: var(--grad); display:flex; align-items:center; justify-content:space-between }
+.achv-name { font-size:16px; font-weight:700 }
+.achv-tip { font-size:12px; opacity:.92 }
+.achv-list { display:grid; grid-template-columns:1fr; gap:10px; margin-top:10px }
+@media(min-width:560px){ .achv-list{ grid-template-columns:repeat(2,1fr) } }
+.achv-item { display:flex; align-items:center; justify-content:space-between; gap:10px; background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:12px; box-shadow:0 6px 14px rgba(0,0,0,.06) }
+.achv-left { display:flex; align-items:center; gap:10px }
+.achv-icon { width:28px; height:28px; border-radius:8px; background:#f1f5f9; display:grid; place-items:center }
+.achv-icon svg { width:18px; height:18px; stroke:#0f172a }
+.achv-text { display:flex; flex-direction:column }
+.achv-title { font-size:14px; font-weight:600; color:#0f172a }
+.achv-rule { font-size:12px; color:#64748b }
+.achv-right { min-width:160px }
+.achv-status { font-size:12px; border-radius:999px; padding:4px 8px; display:inline-block; border:1px solid #e5e7eb; background:#f8fafc; color:#334155 }
+.achv-status.ok { background:#ecfdf5; border-color:#86efac; color:#16a34a }
+.achv-progress { margin-top:6px; height:6px; border-radius:999px; background:#f1f5f9; overflow:hidden }
+.achv-fill { height:100%; width:0; background: var(--bar, #60a5fa) }
+
+/* 分类主题（渐变与进度色） */
+.achv-blue { --grad: linear-gradient(135deg,#2a7df7,#60a5fa); --bar:#60a5fa }
+.achv-green { --grad: linear-gradient(135deg,#22c55e,#10b981); --bar:#22c55e }
+.achv-orange { --grad: linear-gradient(135deg,#f97316,#fb923c); --bar:#fb923c }
+.achv-purple { --grad: linear-gradient(135deg,#8b5cf6,#a78bfa); --bar:#a78bfa }

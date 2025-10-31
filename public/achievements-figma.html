@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>我的成就 · AI Fitness Buddy</title>
+  <link rel="stylesheet" href="/figma.css" />
+  <link rel="stylesheet" href="/achievements-figma.css" />
+  <script src="/utils/achievementRules.js"></script>
+</head>
+<body>
+  <div class="app">
+    <!-- 顶部栏 -->
+    <div class="topbar">
+      <div class="topbar-inner">
+        <button class="icon-btn" id="backBtn" aria-label="返回">←</button>
+        <div class="title">我的成就</div>
+        <a class="pill" href="/analysis-figma.html">🎥 去跳绳分析</a>
+      </div>
+    </div>
+
+    <main class="container narrow page">
+      <style>
+        /* 页面级覆盖：成就页背景按设计稿为浅灰，不使用全站紫色/蓝绿渐变 */
+        body { background: #F3F4F6 !important; }
+        /* 覆盖为移动端 Figma 风格 */
+        :root { --bg: #F3F4F6; }
+        .m-hero { border-radius: 20px; padding: 18px 16px; color: #fff; background: linear-gradient(135deg,#2a7df7,#8b5cf6); box-shadow: 0 10px 24px rgba(43,93,245,0.25); }
+        .m-lv-label{font-size:28px;font-weight:700;text-align:center;}
+        .m-lv-num{font-size:48px;font-weight:800;text-align:center; line-height:1; margin-top:2px;}
+        .m-lv-title{font-size:14px;text-align:center;opacity:.95;}
+        .m-bar{position:relative;margin:14px auto 4px; height:8px; border-radius:999px;}
+        .m-bar-base{height:8px;background:#0b1220;border-radius:999px;}
+        .m-bar-fill{position:absolute;inset:0 auto 0 0;height:8px;border-radius:999px;background:linear-gradient(90deg,#60a5fa,#8b5cf6);width:58%;}
+        .m-bar-labels{display:flex;justify-content:space-between;color:#fff;font-size:12px;margin-top:6px;opacity:.95}
+        .m-caption{margin-top:8px;font-size:12px;text-align:center;color:rgba(255,255,255,.92)}
+        .m-stats-card{margin-top:12px;background:#fff;border-radius:16px;box-shadow:0 8px 20px rgba(0,0,0,.06);border:1px solid #e5e7eb;display:grid;grid-template-columns:1fr 1px 1fr;align-items:center}
+        .m-stat{padding:14px;text-align:center}
+        .m-stat-num{font-size:20px;font-weight:700;color:#0f172a}
+        .m-stat-lab{font-size:12px;color:#64748b;margin-top:2px}
+        .m-sep{width:100%;height:100%;background:#e5e7eb}
+        .m-tabs{display:flex;gap:20px;margin:14px 0;align-items:center}
+        .m-tab{border:none;background:transparent;color:#475569;font-size:14px;padding:8px 0;border-bottom:2px solid transparent;cursor:pointer}
+        .m-tab.active{color:#2563eb;border-bottom-color:#2563eb}
+        .m-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+        @media(min-width:560px){.m-grid{grid-template-columns:repeat(3,1fr)}}
+        .tile{border-radius:16px;min-height:140px;padding:14px;position:relative;color:#fff;display:flex;flex-direction:column;gap:8px;box-shadow:0 6px 14px rgba(0,0,0,.08)}
+        .tile-blue{background:linear-gradient(180deg,#2a7df7,#3b82f6)}
+        .tile-sky{background:linear-gradient(180deg,#60a5fa,#3b82f6)}
+        .tile-green{background:linear-gradient(180deg,#27c89e,#19a87d)}
+        .tile-gray{background:linear-gradient(180deg,#e5e7eb,#cbd5e1);color:#0f172a}
+        .tile-orange{background:linear-gradient(180deg,#fb923c,#f97316)}
+        .tile .title{font-size:14px;font-weight:600}
+        .tile .date{font-size:12px;opacity:.9}
+        .tile .progressline{height:6px;border-radius:999px;background:rgba(255,255,255,.4);overflow:hidden}
+        .tile .progressfill{height:100%;background:#0b1220;width:0%}
+        .tile .status{position:absolute;right:12px;bottom:10px;font-size:12px;background:rgba(255,255,255,.9);color:#0f172a;padding:4px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.6)}
+        /* 底部导航：替换 Emoji 为矢量图标，并按设计稿激活色 */
+        .tab .icon { width:24px; height:24px; }
+        .tab .icon img { width:24px; height:24px; display:block; }
+        .tab .label { font-size: 12px; font-weight: 600; letter-spacing: .15px; }
+        .tab.active .label { color: var(--nav-active); }
+        .tab .icon svg { width:24px; height:24px; display:block; }
+      </style>
+
+      <!-- 英雄卡：严格按移动端 Figma -->
+      <section class="m-hero" aria-label="等级进度">
+        <div class="m-lv-label">Lv.</div>
+        <div class="m-lv-num">5</div>
+        <div class="m-lv-title">跳绳达人</div>
+        <div class="m-bar">
+          <div class="m-bar-base"></div>
+          <div class="m-bar-fill" style="width:58%"></div>
+        </div>
+        <div class="m-bar-labels"><span>580/1000 经验值</span><span>58%</span></div>
+        <p class="m-caption">完成训练/提升动作评分可获经验</p>
+      </section>
+
+      <!-- 统计卡：两列分隔 -->
+      <div class="m-stats-card">
+        <div class="m-stat">
+          <div class="m-stat-num">5/15</div>
+          <div class="m-stat-lab">已解锁成就</div>
+        </div>
+        <div class="m-sep"></div>
+        <div class="m-stat">
+          <div class="m-stat-num">3250</div>
+          <div class="m-stat-lab">总经验值</div>
+        </div>
+      </div>
+
+      <!-- 分类：下划线标签 -->
+      <div class="m-tabs">
+        <button class="m-tab active" data-key="all">全部</button>
+        <button class="m-tab" data-key="milestone">运动里程</button>
+        <button class="m-tab" data-key="skill">动作突破</button>
+        <button class="m-tab" data-key="daily">坚持训练</button>
+        <button class="m-tab" data-key="special">特殊挑战</button>
+      </div>
+
+      <!-- 彩色磁贴网格：严格对齐 Figma 设计 -->
+      <section class="m-grid" id="mGrid">
+        <article class="tile tile-blue" data-type="daily">
+          <div class="title">首秀</div>
+          <div class="date" id="dateFirst">—</div>
+          <div class="progressline"><div class="progressfill" id="pfFirst" style="width:0%"></div></div>
+          <div class="status" id="stFirst">未解锁</div>
+        </article>
+        <article class="tile tile-sky" data-type="milestone">
+          <div class="title">千跳达成</div>
+          <div class="date" id="date1000">—</div>
+          <div class="progressline"><div class="progressfill" id="pf1000" style="width:0%"></div></div>
+          <div class="status" id="st1000">0%</div>
+        </article>
+        <article class="tile tile-gray" data-type="milestone">
+          <div class="title">万跳传奇</div>
+          <div class="date" id="date10000">—</div>
+          <div class="progressline"><div class="progressfill" id="pf10000" style="width:0%"></div></div>
+          <div class="status" id="st10000">0%</div>
+        </article>
+        <article class="tile tile-gray" data-type="skill">
+          <div class="title">速度之王</div>
+          <div class="date" id="dateFast">—</div>
+          <div class="progressline"><div class="progressfill" id="pfFast" style="width:0%"></div></div>
+          <div class="status" id="stFast">0%</div>
+        </article>
+        <article class="tile tile-green" data-type="skill">
+          <div class="title">完美姿态</div>
+          <div class="date" id="datePerfect">—</div>
+          <div class="progressline"><div class="progressfill" id="pfPerfect" style="width:0%"></div></div>
+          <div class="status" id="stPerfect">未解锁</div>
+        </article>
+        <article class="tile tile-orange" data-type="special">
+          <div class="title">满分挑战</div>
+          <div class="date" id="dateFull">—</div>
+          <div class="progressline"><div class="progressfill" id="pfFull" style="width:0%"></div></div>
+          <div class="status" id="stFull">未解锁</div>
+        </article>
+      </section>
+
+    </main>
+
+    <!-- 底部导航（全站统一、SVG 图标） -->
+    <footer class="tabbar">
+      <div class="tabbar-inner">
+        <a class="tab" href="/home-figma.html" aria-label="首页">
+          <div class="icon" aria-hidden="true">
+            <img src="/icons/nav-home.svg" alt="" />
+          </div>
+          <div class="label">首页</div>
+        </a>
+        <a class="tab" href="/analysis-figma.html" aria-label="分析">
+          <div class="icon" aria-hidden="true">
+            <img src="/icons/nav-analysis.svg" alt="" />
+          </div>
+          <div class="label">分析</div>
+        </a>
+        <a class="tab" href="/plan-figma.html" aria-label="计划">
+          <div class="icon" aria-hidden="true">
+            <img src="/icons/nav-plan.svg" alt="" />
+          </div>
+          <div class="label">计划</div>
+        </a>
+        <a class="tab" href="/data-figma.html" aria-label="数据">
+          <div class="icon" aria-hidden="true">
+            <img src="/icons/nav-data.svg" alt="" />
+          </div>
+          <div class="label">数据</div>
+        </a>
+        <a class="tab active" data-dot="true" href="/achievements-figma.html" aria-label="成就">
+          <div class="icon" aria-hidden="true">
+            <img src="/icons/nav-achievements.svg" alt="" />
+          </div>
+          <div class="label">成就</div>
+        </a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // 返回：优先回退，无历史则首页
+    const backBtn = document.getElementById('backBtn');
+    backBtn?.addEventListener('click', () => {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = '/home-figma.html';
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // 登录态校验：与数据页一致
+      const user = localStorage.getItem('user');
+      if (!user) { window.location.href = '/login-figma.html'; return; }
+
+      // 读取训练记录
+      const records = JSON.parse(localStorage.getItem('jump_records') || '[]').sort((a,b)=> (a.ts||0)-(b.ts||0));
+      const sum = (arr, f) => arr.reduce((s,x)=> s + (f(x)||0), 0);
+      const max = (arr, f) => arr.reduce((m,x)=> Math.max(m, f(x)||0), 0);
+      const fmtDate = (ts)=> { if(!ts) return '—'; const d=new Date(ts); const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const da=String(d.getDate()).padStart(2,'0'); return `${y}.${m}.${da}`; };
+
+      // —— 新增：接入成就计算引擎，更新等级/总经验/解锁数 ——
+      if (window.AchievementEngine) {
+        const prev = JSON.parse(localStorage.getItem('achievements_state') || 'null');
+        const out = window.AchievementEngine.updateAchievements(prev, records, { targetWeeklyHours: 5 });
+        try { localStorage.setItem('achievements_state', JSON.stringify(out.achievements)); } catch {}
+
+        // 英雄卡（等级与进度）
+        const lvEl = document.querySelector('.m-lv-num');
+        const barFill = document.querySelector('.m-bar-fill');
+        const barLabels = document.querySelector('.m-bar-labels');
+        const nextNeed = out.levelInfo?.nextLevelNeed || 0;
+        const into = out.levelInfo?.expIntoLevel || 0;
+        const pct = nextNeed>0 ? Math.round((into/nextNeed)*100) : 0;
+        if (lvEl) lvEl.textContent = String(out.level);
+        if (barFill) barFill.style.width = `${pct}%`;
+        if (barLabels) {
+          const spans = barLabels.querySelectorAll('span');
+          if (spans[0]) spans[0].textContent = `${Math.round(into)}/${Math.round(nextNeed)} 经验值`;
+          if (spans[1]) spans[1].textContent = `${pct}%`;
+        }
+
+        // 统计卡：已解锁成就 / 总经验值
+        const nums = document.querySelectorAll('.m-stats-card .m-stat .m-stat-num');
+        if (nums[0]) nums[0].textContent = `${out.achievements.filter(a=>a.unlocked).length}/${window.AchievementEngine.defs.length}`;
+        if (nums[1]) nums[1].textContent = String(out.totalExp);
+
+        // 磁贴：映射到部分核心成就
+        const findAch = (id) => out.achievements.find(a=> a.id===id);
+        const setTile = (id, dateEl, pfEl, stEl)=> {
+          const a = findAch(id); if (!a) return; const pct = Math.round(a.progress*100);
+          if (pfEl) pfEl.style.width = `${pct}%`;
+          if (stEl) stEl.textContent = a.unlocked ? '已解锁' : `${pct}%`;
+          if (dateEl) dateEl.textContent = a.unlockedAt ? fmtDate(a.unlockedAt) : '—';
+        };
+        setTile('first_session', dateFirst, pfFirst, stFirst);
+        setTile('total_10k', date10000, pf10000, st10000);
+        setTile('score_10', dateFull, pfFull, stFull);
+        // 完美姿态：使用9.5分规则
+        const ach95 = findAch('score_9_5');
+        if (ach95) {
+          const pctp = Math.round(ach95.progress*100);
+          pfPerfect.style.width = `${pctp}%`;
+          stPerfect.textContent = ach95.unlocked ? '已解锁' : `${pctp}%`;
+          datePerfect.textContent = ach95.unlockedAt ? fmtDate(ach95.unlockedAt) : '—';
+        }
+      }
+
+      // 基础统计（保留：用于未接入引擎时的兼容与速度之王）
+      const totalCount = sum(records, r=> Number(r.count)||0);
+      const bestCountSingle = max(records, r=> Number(r.count)||0);
+      const bestRating = records.length? Math.max(...records.map(r=> Number(r.score10 ?? (r.symmetry_score||0)/10))) : 0;
+      const bestRate = records.length? Math.max(...records.map(r=> { const c=Number(r.count)||0, d=Number(r.duration)||0; return d>0? (c/(d/60)) : 0; })) : 0;
+
+      // 首秀（若未使用引擎）
+      if (window.AchievementEngine == null && records.length) {
+        dateFirst.textContent = fmtDate(records[0].ts);
+        pfFirst.style.width = '100%';
+        stFirst.textContent = '已解锁';
+      }
+
+      // 累计里程（千跳/万跳）
+      let acc = 0, ts1000 = null, ts10000 = null;
+      for(const r of records){ acc += Number(r.count)||0; if(!ts1000 && acc>=1000) ts1000 = r.ts; if(!ts10000 && acc>=10000) ts10000 = r.ts; }
+      const pct1000 = Math.min(100, Math.round((totalCount/1000)*100));
+      pf1000.style.width = `${pct1000}%`;
+      st1000.textContent = ts1000? '已解锁' : `${pct1000}%`;
+      date1000.textContent = fmtDate(ts1000);
+
+      const pct10000 = Math.min(100, Math.round((totalCount/10000)*100));
+      pf10000.style.width = `${pct10000}%`;
+      st10000.textContent = ts10000? '已解锁' : `${pct10000}%`;
+      date10000.textContent = fmtDate(ts10000);
+
+      // 速度之王（≥ 240 次/分钟）
+      const speedTarget = 240;
+      const pctFast = Math.min(100, Math.round((bestRate/speedTarget)*100));
+      pfFast.style.width = `${pctFast}%`;
+      stFast.textContent = bestRate>=speedTarget? '已解锁' : `${pctFast}%`;
+      dateFast.textContent = fmtDate(records.find(r=>{ const c=Number(r.count)||0, d=Number(r.duration)||0; return d>0 && (c/(d/60))>=speedTarget; })?.ts);
+
+      // 完美姿态（评分 ≥ 9.5，与引擎一致）
+      const pctPerfect = Math.min(100, Math.round((bestRating/9.5)*100));
+      pfPerfect.style.width = `${pctPerfect}%`;
+      if (window.AchievementEngine == null) {
+        stPerfect.textContent = bestRating>=9.5? '已解锁' : `${pctPerfect}%`;
+        datePerfect.textContent = fmtDate(records.find(r=>{ const s=Number(r.score10 ?? (r.symmetry_score||0)/10); return s>=9.5; })?.ts);
+      }
+
+      // 满分挑战（评分 = 10）兼容保留（引擎已覆盖）
+      const pctFull = Math.min(100, Math.round((bestRating/10)*100));
+      pfFull.style.width = `${pctFull}%`;
+      if (window.AchievementEngine == null) {
+        stFull.textContent = bestRating>=10? '已解锁' : '未解锁';
+        dateFull.textContent = fmtDate(records.find(r=>{ const s=Number(r.score10 ?? (r.symmetry_score||0)/10); return s>=10; })?.ts);
+      }
+
+      // 分类筛选
+      const tabs = document.querySelectorAll('.m-tab');
+      const cards = document.querySelectorAll('#mGrid .tile');
+      tabs.forEach(btn=>{
+        btn.addEventListener('click',()=>{
+          tabs.forEach(b=> b.classList.toggle('active', b===btn));
+          const key = btn.dataset.key;
+          cards.forEach(card=>{ card.style.display = (key==='all' || card.dataset.type===key)? 'flex' : 'none'; });
+        })
+      })
+    });
+  </script>
+</body>
+</html>

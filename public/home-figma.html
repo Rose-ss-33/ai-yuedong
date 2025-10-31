@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI健身伙伴 - 首页</title>
+    <link rel="stylesheet" href="figma.css">
+    <style>
+        /* 首页特定样式 - 精准还原 Figma 设计 */
+        .greeting { 
+            font-size: 20px; 
+            font-weight: 600; 
+            margin-bottom: 4px; 
+            color: #1F2937;
+        }
+        .date { 
+            color: #6B7280; 
+            font-size: 14px; 
+            margin-bottom: 12px; 
+        }
+        .status-pill { 
+            background: #D1FAE5; 
+            color: #065F46; 
+            border: 1px solid #10B981; 
+            font-size: 12px;
+            font-weight: 500;
+            padding: 4px 8px;
+            border-radius: 12px;
+        }
+        
+        /* 操作卡片样式 */
+        .action-card { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            padding: 16px; 
+            border-radius: 16px;
+            border: 1px solid #E5E7EB;
+            background: #FFFFFF;
+        }
+        .action-icon { 
+            width: 48px; 
+            height: 48px; 
+            border-radius: 12px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 24px; 
+        }
+        .action-continue .action-icon { 
+            background: #DBEAFE; 
+            color: #1D4ED8; 
+        }
+        .action-report .action-icon { 
+            background: #D1FAE5; 
+            color: #065F46; 
+        }
+        
+        .action-text h3 { 
+            margin: 0 0 4px; 
+            font-size: 16px; 
+            font-weight: 600; 
+            color: #1F2937;
+        }
+        .action-text p { 
+            margin: 0; 
+            color: #6B7280; 
+            font-size: 14px; 
+        }
+        
+        /* 数据网格样式 */
+        .data-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 12px; 
+            margin: 20px 0; 
+        }
+        .data-card { 
+            padding: 16px; 
+            text-align: center; 
+            border-radius: 16px;
+            border: 1px solid #E5E7EB;
+            background: #FFFFFF;
+        }
+        .data-value { 
+            font-size: 24px; 
+            font-weight: 700; 
+            margin: 8px 0 4px; 
+            color: #1F2937;
+        }
+        .data-label { 
+            color: #6B7280; 
+            font-size: 14px; 
+        }
+        
+        /* 进度条样式 */
+        .progress-section { 
+            margin: 20px 0; 
+        }
+        .progress-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 8px; 
+        }
+        .progress-label { 
+            font-size: 16px; 
+            font-weight: 600; 
+            color: #1F2937;
+        }
+        .progress-count { 
+            color: #6B7280; 
+            font-size: 14px; 
+        }
+        
+        .progress-bar { 
+            height: 8px; 
+            background: #E5E7EB; 
+            border-radius: 4px; 
+            overflow: hidden; 
+        }
+        .progress-fill { 
+            height: 100%; 
+            background: linear-gradient(90deg, #2563EB, #10B981); 
+            border-radius: 4px; 
+            width: 64%; 
+        }
+        
+        /* 分析横幅样式 */
+        .analysis-banner {
+            background: linear-gradient(90deg, #10B981, #2563EB);
+            border-radius: 20px;
+            padding: 20px;
+            color: white;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .analysis-banner h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 8px 0;
+        }
+        .analysis-banner p {
+            font-size: 14px;
+            margin: 0 0 16px 0;
+            opacity: 0.9;
+        }
+        .analysis-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 480px) {
+            .data-grid { grid-template-columns: 1fr; }
+            .action-card { padding: 12px; }
+            .analysis-banner { padding: 16px; }
+        }
+        
+        /* 顶部导航栏样式 */
+        .topbar {
+            background: #FFFFFF;
+            border-bottom: 1px solid #E5E7EB;
+            padding: 12px 16px;
+        }
+        .topbar-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 448px;
+            margin: 0 auto;
+        }
+        .page-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1F2937;
+        }
+        .logout-btn {
+            background: none;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 14px;
+            color: #6B7280;
+            cursor: pointer;
+        }
+        
+        /* 主内容区域 */
+        .main-content {
+            max-width: 448px;
+            margin: 0 auto;
+            padding: 16px;
+            padding-bottom: 80px; /* 为底部导航留出空间 */
+        }
+        
+        /* 底部导航样式 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #FFFFFF;
+            border-top: 1px solid #E5E7EB;
+            padding: 8px 0;
+            z-index: 100;
+        }
+        .nav-inner {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            max-width: 448px;
+            margin: 0 auto;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 0;
+            text-decoration: none;
+            color: #6B7280;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .nav-item.active {
+            color: #10B981;
+        }
+        .nav-icon {
+            font-size: 20px;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body>
+  <div class="app">
+    <!-- 顶部导航栏 -->
+    <div class="topbar">
+      <div class="topbar-inner">
+        <div class="page-title">AI健身伙伴</div>
+        <button class="logout-btn" onclick="logout()">退出登录</button>
+      </div>
+    </div>
+    
+    <!-- 主内容区域 -->
+    <div class="main-content">
+      <!-- 用户问候区域 -->
+      <div style="margin-bottom: 20px;">
+        <div class="greeting">你好，小明！</div>
+        <div class="date">2024年12月25日</div>
+        <div class="status-pill">活力满满</div>
+      </div>
+      
+      <!-- 操作卡片区域 -->
+      <div class="list" style="gap: 16px;">
+        <div class="action-card action-continue">
+          <div class="action-icon">🏃</div>
+          <div class="action-text">
+            <h3>继续训练</h3>
+            <p>剩余1组</p>
+          </div>
+        </div>
+        <div class="action-card action-report">
+          <div class="action-icon">📊</div>
+          <div class="action-text">
+            <h3>查看报告</h3>
+            <p>上次训练分析</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 分析横幅 -->
+      <div class="analysis-banner">
+        <h3>开始分析</h3>
+        <p>上传视频获取专业分析</p>
+        <button class="analysis-btn" onclick="startAnalysis()">开始分析</button>
+      </div>
+      
+      <!-- 数据统计区域 -->
+      <div class="data-grid">
+        <div class="data-card">
+          <div class="data-value">230次</div>
+          <div class="data-label">今日已跳</div>
+        </div>
+        <div class="data-card">
+          <div class="data-value">8.3分</div>
+          <div class="data-label">当前评分</div>
+        </div>
+      </div>
+      
+      <!-- 进度条区域 -->
+      <div class="progress-section">
+        <div class="progress-header">
+          <div class="progress-label">本周完成</div>
+          <div class="progress-count">3/5次</div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 底部导航栏 -->
+    <div class="bottom-nav">
+      <div class="nav-inner">
+        <a href="home-figma.html" class="nav-item active">
+          <span class="nav-icon"><img src="/icons/nav-home.svg" alt="" /></span>
+          <span class="nav-label">首页</span>
+        </a>
+        <a href="analysis-figma.html" class="nav-item">
+          <span class="nav-icon"><img src="/icons/nav-analysis.svg" alt="" /></span>
+          <span class="nav-label">分析</span>
+        </a>
+        <a href="plan-figma.html" class="nav-item">
+          <span class="nav-icon"><img src="/icons/nav-plan.svg" alt="" /></span>
+          <span class="nav-label">计划</span>
+        </a>
+        <a href="data-figma.html" class="nav-item">
+          <span class="nav-icon"><img src="/icons/nav-data.svg" alt="" /></span>
+          <span class="nav-label">数据</span>
+        </a>
+        <a href="achievements-figma.html" class="nav-item">
+          <span class="nav-icon"><img src="/icons/nav-achievements.svg" alt="" /></span>
+          <span class="nav-label">成就</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function logout(){
+      try {
+        document.cookie = 'jr_user_id=; Max-Age=0; Path=/'
+      } catch(e){}
+      location.href = '/login-figma.html'
+    }
+  </script>
+</body>
+</html>

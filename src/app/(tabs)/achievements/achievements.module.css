@@ -1,0 +1,180 @@
+/* Achievements page styles—replicate Figma layout and palette */
+
+.pageWrap {
+  min-height: 100vh;
+  background: #F3F4F6; /* 与 Figma 背景一致 */
+  color: #0f172a;
+  padding: 16px;
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.backBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.topTitle {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.topActions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.actionBtn {
+  background: #fde047;
+  color: #1f2937;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.actionGhost {
+  background: #e5e7eb;
+  color: #374151;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.resetBtn {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* 英雄卡（严格贴合 Figma） */
+.hero {
+  border-radius: 20px;
+  padding: 20px;
+  color: #0b1220;
+  background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+  border: 1px solid #dbeafe;
+  box-shadow: 0 8px 18px rgba(59,130,246,0.12);
+  margin-bottom: 12px;
+}
+.heroLevel { font-size: 18px; font-weight: 700; }
+.heroSub { font-size: 12px; color: #475569; margin-top: 4px; }
+.heroBar { margin-top: 12px; height: 12px; border-radius: 999px; overflow: hidden; background: #cbd5e1; }
+.heroFill { height: 100%; background: linear-gradient(90deg, #60a5fa, #34d399); width: 0%; }
+.heroStats { margin-top: 12px; display: flex; gap: 10px; }
+.heroPill { flex: 1; display: flex; align-items: center; justify-content: center; padding: 8px 10px; border-radius: 12px; font-size: 12px; color: #334155; background: #f1f5f9; border: 1px solid #e2e8f0; }
+
+.statRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 480px) {
+  .statRow { grid-template-columns: 1fr; }
+}
+
+.statCard {
+  background: #fff;
+  border-radius: 14px;
+  padding: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.statNumber { font-size: 22px; font-weight: 700; color: #0f172a; }
+.statLabel { margin-top: 2px; font-size: 13px; color: #64748b; }
+
+.tabs { display: flex; gap: 8px; margin: 10px 0 14px; }
+
+.tab,
+.tabActive {
+  position: relative;
+  background: #f8fafc; /* 胶囊未选中态 */
+  color: #334155;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 8px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.tabActive {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+  color: #2563eb;
+}
+
+.tabIndicator {
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 3px;
+  background: #2563eb;
+  border-radius: 999px;
+}
+
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+@media (min-width: 560px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+
+.badge {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.badgeYellow { background: #fef9c3; }
+.badgeBlue   { background: #e0f2fe; }
+.badgePurple { background: #ede9fe; }
+.badgeTeal   { background: #d1fae5; }
+.badgeGray   { background: #f8fafc; }
+
+.badgeIcon { width: 56px; height: 56px; border-radius: 12px; background: linear-gradient(135deg, #f8fafc, #e5e7eb); flex: 0 0 auto; }
+.badgeMeta { flex: 1 1 auto; }
+.badgeTitle { font-size: 14px; font-weight: 600; color: #0f172a; }
+.badgeTitle[data-color="purple"] { color: #6d28d9; }
+.badgeTitle[data-color="blue"]   { color: #2563eb; }
+.badgeTitle[data-color="teal"]   { color: #0f766e; }
+.badgeTitle[data-color="yellow"] { color: #92400e; }
+.badgeSub { margin-top: 6px; font-size: 12px; color: #475569; }
+
+/* 进度条（替换圆环，更贴 Figma） */
+.badgeProgressBar { margin-top: 10px; height: 8px; border-radius: 999px; background: #f1f5f9; overflow: hidden; }
+.badgeProgressFill { height: 100%; background: #60a5fa; width: 0%; }
+
+/* 右侧状态胶囊 */
+.badgePill { flex: 0 0 auto; padding: 6px 10px; border-radius: 12px; font-size: 12px; color: #334155; background: #f1f5f9; border: 1px solid #e2e8f0; }
+
+.loading { font-size: 13px; color: #64748b; }
+.errorBar { margin-top: 8px; font-size: 13px; color: #ef4444; }

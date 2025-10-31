@@ -1,0 +1,130 @@
+{
+  "total_count": 325,
+  "achievements": [
+    "初级跳绳达人"
+  ],
+  "users": {
+    "123456": {
+      "salt": "62TU8hEpp3McjyFAW6v4+w==",
+      "password_hash": "4c782dfc089d367008b0dcb1c32847996b7c9c9ce2915b93412751acd5cea6fc"
+    },
+    "demo": {
+      "salt": "nRDDx37f2nPc33r1sw5RUQ==",
+      "password_hash": "9d94a4d035c06b7adc68a5e7ce47130a417063ce3d59f44661a2480a8a416885"
+    }
+  },
+  "stats": {
+    "default": {
+      "total_count": 0,
+      "achievements": [],
+      "sessions": [
+        {
+          "time": "2025-10-28T11:44:10.953684Z",
+          "count": 138,
+          "duration_seconds": 65.99968223399134,
+          "cadence_spm": 125.5
+        },
+        {
+          "time": "2025-10-28T11:46:17.098740Z",
+          "count": 138,
+          "duration_seconds": 65.99968223399134,
+          "cadence_spm": 125.5
+        }
+      ]
+    },
+    "123456": {
+      "total_count": 1656,
+      "achievements": [
+        "高级跳绳达人",
+        "中级跳绳达人",
+        "初级跳绳达人"
+      ],
+      "sessions": [
+        {
+          "time": "2025-10-30T02:12:16.859533Z",
+          "count": 138,
+          "duration_seconds": 65.99968223399134,
+          "cadence_spm": 125.5
+        },
+        {
+          "time": "2025-10-30T02:29:22.470032Z",
+          "count": 138,
+          "duration_seconds": 65.99968223399134,
+          "cadence_spm": 125.5
+        },
+        {
+          "time": "2025-10-30T02:31:17.512108Z",
+          "count": 138,
+          "duration_seconds": 65.99968223399134,
+          "cadence_spm": 125.5
+        },
+        {
+          "time": "2025-10-30T02:37:40.754637Z",
+          "count": 138,
+          "duration_seconds": 65.99968223399134,
+          "cadence_spm": 125.5
+        },
+        {
+          "time": "2025-10-30T02:38:42.477343Z",
+          "count": 138,
+          "duration_seconds": 65.99968223399134,
+          "cadence_spm": 125.5
+        },
+        {
+          "time": "2025-10-30T02:40:06.798561Z",
+          "count": 138,
+          "duration_seconds": 65.99968223399134,
+          "cadence_spm": 125.5
+        },
+        {
+          "time": "2025-10-30T02:41:33.712771Z",
+          "count": 138,
+          "duration_seconds": 65.99968223399134,
+          "cadence_spm": 125.5
+        },
+        {
+          "time": "2025-10-30T02:46:26.453173Z",
+          "count": 138,
+          "duration_seconds": 65.99968223399134,
+          "cadence_spm": 125.5
+        },
+        {
+          "time": "2025-10-30T02:56:40.660378Z",
+          "count": 138,
+          "duration_seconds": 65.99968223399134,
+          "cadence_spm": 125.5
+        },
+        {
+          "time": "2025-10-30T02:59:53.880096Z",
+          "count": 138,
+          "duration_seconds": 65.99968223399134,
+          "cadence_spm": 125.5
+        },
+        {
+          "time": "2025-10-30T03:19:19.215717Z",
+          "count": 138,
+          "duration_seconds": 65.99968223399134,
+          "cadence_spm": 125.5
+        },
+        {
+          "time": "2025-10-31T11:09:09.303457Z",
+          "count": 138,
+          "duration_seconds": 65.99968223399134,
+          "cadence_spm": 125.5
+        }
+      ]
+    },
+    "demo": {
+      "total_count": 0,
+      "achievements": [],
+      "sessions": [
+        {
+          "time": "2025-10-30T02:09:13.160238Z",
+          "count": 0,
+          "duration_seconds": 0.0,
+          "cadence_spm": 0.0
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>跃动分析 · 登录</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/figma.css" />
+</head>
+<body>
+  <div class="app">
+    <div class="container narrow" style="padding: 24px 16px;">
+      <style>
+        /* 登录页专属样式，严格贴近 Figma 移动端 */
+        .login-hero { min-height: 72vh; display:flex; flex-direction:column; align-items:center; gap:18px; justify-content:flex-start; }
+        .login-ico { display:flex; align-items:center; justify-content:center; overflow:visible; }
+        .login-ico img { width:100%; height:auto; display:block; }
+        .login-title { font-family: 'Arimo', ui-sans-serif, system-ui; font-size:28px; font-weight:700; color:#fff; text-align:center; letter-spacing: 0.2px; }
+        .login-sub { font-family: 'Arimo', ui-sans-serif, system-ui; font-size:14px; font-weight:400; color: rgba(255,255,255,.92); text-align:center; }
+        .login-card { width:100%; max-width: 520px; border-radius:18px; }
+        .login-row { display:flex; align-items:center; gap:10px; color:#8b8b93; }
+        .login-eye { margin-left:auto; cursor:pointer; }
+        .login-actions { display:flex; align-items:center; gap:8px; margin-top:8px; font-size:12px; color:#6b7280; }
+        .login-btn { margin-top:12px; }
+        .btn-disabled { background:#e5e7eb !important; color:#9ca3af !important; cursor:not-allowed !important; }
+        .login-tip { text-align:center; font-size:12px; color:#6b7280; margin-top:6px; }
+        .login-footer { color:#fff; text-align:center; margin-top:12px; }
+
+        /* Figma 登录页专属像素级对齐：背景渐变、装饰层、输入行底边、图标按钮与禁用态 */
+        .login-hero { background: linear-gradient(135deg, rgba(43,127,255,1) 0%, rgba(21,93,252,1) 50%, rgba(0,201,80,1) 100%); position: relative; }
+        .login-bg { position:absolute; inset:0; width:100%; height:auto; opacity:0.10; pointer-events:none; z-index:0; }
+        .login-hero > * { position:relative; z-index:1; }
+        .login-icon { width:20px; height:20px; display:block; }
+        .login-row { border-bottom: 2px solid #E5E7EB; padding-bottom: 8px; }
+        .input + .divider { height:2px; background:#E5E7EB; }
+        .login-eye-btn { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:4px; border:none; background:transparent; cursor:pointer; margin-left:auto; }
+        .login-eye-btn img { width:20px; height:20px; opacity:.85; }
+        .login-actions a { color: #FF6A00; }
+        /* Pixel-perfect tweaks: background overlay sizing, row gap, card shadow & radius */
+        .login-hero {
+          position: relative;
+        }
+        .login-hero .login-bg {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          top: 0;
+          width: 448px;  /* Figma overlay width */
+          height: 785px; /* Figma overlay height */
+          opacity: 0.10; /* 10% as per design */
+          pointer-events: none;
+        }
+        
+        /* Row gap to match Figma spacing */
+        .login-row {
+          gap: 12px;
+        }
+        
+        /* Card shadow and radius per Figma (effect_R1THPH and radius 16) */
+        .input-card { border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+        /* Responsive scaling to match Figma across devices */
+        :root {
+          --base-overlay-w: 448; /* Figma overlay width */
+          --base-overlay-h: 785; /* Figma overlay height */
+        }
+        
+        /* Container scales while maintaining center alignment */
+        .login-hero {
+          width: min(92vw, 448px);
+          margin: 0 auto;
+          padding: clamp(16px, 4vw, 24px);
+          position: relative; /* ensure overlay absolute positioning is relative */
+        }
+        
+        /* Overlay follows container width and keeps aspect ratio */
+        .login-hero .login-bg {
+          width: 100%;
+          height: auto; /* image keeps intrinsic ratio */
+          top: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 0;
+        }
+        
+        /* Ensure foreground content sits above the decorative overlay */
+        .login-hero *:not(.login-bg) {
+          position: relative;
+          z-index: 1;
+        }
+        
+        /* Hero icon scales between 90 and 120 for better prominence */
+        .login-ico { width: clamp(180px, 32vw, 240px); height: clamp(180px, 32vw, 240px); }
+        
+        /* Title and subtitle scale responsively */
+        .login-title { font-size: clamp(24px, 6vw, 28px); line-height: 1.15; }
+        .login-sub { font-size: clamp(12px, 3.8vw, 14px); line-height: 1.4; }
+        
+        /* Input card width & padding scale */
+        .input-card {
+          width: 100%;
+          max-width: 448px;
+          margin: 0 auto;
+          padding: clamp(12px, 3vw, 16px);
+        }
+        
+        /* Row gap scales for tighter small screens and precise spacing at larger */
+        .login-row { gap: clamp(10px, 3vw, 12px); }
+        
+        /* Buttons scale slightly; keep tap target large enough */
+        .button, .btn, .login-btn {
+          padding: clamp(10px, 2.8vw, 12px) clamp(14px, 4vw, 18px);
+          font-size: clamp(14px, 3.8vw, 16px);
+        }
+        
+        /* Small phones: subtle tweaks */
+        @media (max-width: 360px) {
+          .login-title { letter-spacing: 0.1px; }
+          .login-hero { width: min(95vw, 448px); }
+        }
+        
+        /* Tablets and above: slightly less padding around card for balance */
+        @media (min-width: 768px) {
+          .login-hero { width: min(85vw, 448px); }
+          .input-card { padding: 16px; }
+        }
+      </style>
+
+      <div class="hero login-hero">
+        <img class="login-bg" src="/login-bg-overlay-2.svg" alt="" aria-hidden="true" />
+        <div class="login-ico"><img src="/login-hero-stick.svg" alt="Login Hero Stickman"/></div>
+        <div class="login-title">跃动分析</div>
+        <div class="login-sub">专业跳绳动作分析工具</div>
+
+        <div class="card input-card login-card" style="margin-top: 6px;">
+          <div class="login-row">
+            <img class="login-icon" src="/icon-user.svg" alt="用户名" />
+            <input id="username" class="input" placeholder="请输入用户名" />
+          </div>
+          <div class="divider"></div>
+          <div class="login-row">
+            <img class="login-icon" src="/icon-lock.svg" alt="密码" />
+            <input id="password" class="input" placeholder="请输入密码" type="password" />
+            <button id="toggle" class="login-eye-btn" title="显示/隐藏密码"><img src="/icon-eye.svg" alt="显示或隐藏密码" /></button>
+          </div>
+          <div class="login-actions">
+            <label style="display:flex; align-items:center; gap:6px;">
+              <input type="checkbox" id="remember" /> 记住我
+            </label>
+            <a href="#" style="margin-left:auto; text-decoration:none; color:#FF6A00;">忘记密码？</a>
+          </div>
+          <button id="loginBtn" class="btn btn-wide login-btn btn-disabled" disabled>登录</button>
+          <div id="msg" class="login-tip">请完善信息</div>
+        </div>
+
+        <div class="login-footer">
+          <span style="opacity:.85;">还没有账号？</span>
+          <a id="registerLink" href="#" style="color:#fff; font-weight:700; text-decoration:none; margin-left:8px;">立即注册</a>
+        </div>
+        <div class="login-footer" style="opacity:.9;">让每次跳跃更专业</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const username = document.getElementById('username')
+    const password = document.getElementById('password')
+    const loginBtn = document.getElementById('loginBtn')
+    const msg = document.getElementById('msg')
+    const toggle = document.getElementById('toggle')
+    const registerLink = document.getElementById('registerLink')
+
+    function refreshBtn() {
+      const u = (username.value || '').trim()
+      const p = (password.value || '').trim()
+      const ok = !!(u && p)
+      loginBtn.disabled = !ok
+      loginBtn.classList.toggle('btn-primary', ok)
+      loginBtn.classList.toggle('btn-disabled', !ok)
+      loginBtn.textContent = '登录'
+      msg.textContent = ok ? '请确认信息后登录' : '请完善信息'
+      msg.style.color = '#6b7280'
+    }
+
+    username.addEventListener('input', refreshBtn)
+    password.addEventListener('input', refreshBtn)
+    refreshBtn()
+
+    toggle.addEventListener('click', () => {
+      password.type = password.type === 'password' ? 'text' : 'password'
+    })
+
+    async function adoptSession(uid) {
+      try {
+        await fetch(`/api/adopt?user_id=${encodeURIComponent(uid)}`, {
+          method: 'GET',
+          credentials: 'include'
+        })
+      } catch (e) {
+        console.warn('adopt session error:', e)
+      }
+    }
+
+    loginBtn.addEventListener('click', async () => {
+      const u = (username.value || '').trim()
+      const p = (password.value || '').trim()
+      if (!u || !p) {
+        msg.textContent = '请输入用户名与密码'
+        msg.style.color = '#ef4444'
+        return
+      }
+      msg.textContent = '登录中…'
+      msg.style.color = '#6b7280'
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: u, password: p })
+        })
+        const data = await res.json()
+        if (!res.ok) {
+          msg.textContent = '登录失败：' + (data.error || res.status)
+          msg.style.color = '#ef4444'
+          return
+        }
+        msg.textContent = '登录成功，正在进入首页…'
+        msg.style.color = '#16a34a'
+        // 在同域写入 cookie 后进入主界面
+        await adoptSession(data.user_id || u)
+        // 将登录信息写入本地存储，供各页面统一校验
+        try {
+          const uid = data.user_id || u
+          localStorage.setItem('user', JSON.stringify({ user_id: uid, username: u }))
+          localStorage.setItem('userData', JSON.stringify({ userId: uid, username: u }))
+        } catch {}
+        location.href = '/home-figma.html'
+      } catch (e) {
+        msg.textContent = '网络错误：' + String(e)
+        msg.style.color = '#ef4444'
+      }
+    })
+
+    registerLink.addEventListener('click', async (e) => {
+      e.preventDefault()
+      const u = (username.value || '').trim()
+      const p = (password.value || '').trim()
+      if (!u || !p) {
+        msg.textContent = '注册前请先填写用户名与密码'
+        msg.style.color = '#ef4444'
+        return
+      }
+      msg.textContent = '注册中…'
+      msg.style.color = '#6b7280'
+      try {
+        const res = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: u, password: p })
+        })
+        const data = await res.json()
+        if (!res.ok) {
+          msg.textContent = '注册失败：' + (data.error || res.status)
+          msg.style.color = '#ef4444'
+          return
+        }
+        msg.textContent = '注册成功，已为你登录，正在进入首页…'
+        msg.style.color = '#16a34a'
+        // 同域写入 cookie 后进入主界面
+        await adoptSession(data.user_id || u)
+        // 同步写入本地存储，避免其他页面因localStorage校验而重定向
+        try {
+          const uid = data.user_id || u
+          localStorage.setItem('user', JSON.stringify({ user_id: uid, username: u }))
+          localStorage.setItem('userData', JSON.stringify({ userId: uid, username: u }))
+        } catch {}
+        location.href = '/home-figma.html'
+      } catch (e) {
+        msg.textContent = '网络错误：' + String(e)
+        msg.style.color = '#ef4444'
+      }
+    })
+  </script>
+</body>
+</html>

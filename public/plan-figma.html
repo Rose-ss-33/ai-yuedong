@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>训练计划 · 跃动分析</title>
+  <style>
+    /* 训练计划页面特定样式 */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #F8FAFC;
+      color: #1F2937;
+    }
+    
+    .app {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* 顶部导航栏 */
+    .topbar {
+      background: #FFFFFF;
+      border-bottom: 1px solid #E5E7EB;
+      padding: 12px 16px;
+    }
+    
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    
+    .icon-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 8px;
+    }
+    
+    .icon-btn:hover {
+      background: #F3F4F6;
+    }
+    
+    .title {
+      font-weight: 600;
+      font-size: 18px;
+      color: #1F2937;
+    }
+    
+    /* 主内容区域 */
+    .main-content {
+      flex: 1;
+      padding: 16px;
+      max-width: 400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    
+    /* 标签切换区域 */
+    .tab-container {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    
+    .tab-button {
+      padding: 8px 16px;
+      border: 1px solid #D1D5DB;
+      border-radius: 20px;
+      background: #FFFFFF;
+      color: #6B7280;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .tab-button.active {
+      background: #2563EB;
+      color: #FFFFFF;
+      border-color: #2563EB;
+    }
+    
+    /* 进度概览卡片 */
+    .progress-card {
+      background: #FFFFFF;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      margin-bottom: 16px;
+    }
+    
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .level-badge {
+      background: #FBBF24;
+      color: #FFFFFF;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .progress-circle {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 6px solid #BFDBFE;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #2563EB;
+      font-size: 16px;
+    }
+    
+    .progress-text {
+      color: #6B7280;
+      font-size: 14px;
+    }
+    
+    .progress-text strong {
+      color: #2563EB;
+    }
+    
+    /* 训练卡片 */
+    .training-card {
+      background: #FFFFFF;
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      margin-bottom: 12px;
+      opacity: 0.7;
+      border: 1px solid #E5E7EB;
+    }
+    
+    .training-card.active {
+      opacity: 1;
+      border-color: #2563EB;
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    .training-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1F2937;
+    }
+    
+    .training-duration {
+      color: #6B7280;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+    
+    .training-steps {
+      margin-bottom: 12px;
+    }
+    
+    .step-item {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+    
+    .step-number {
+      color: #2563EB;
+      font-weight: 600;
+    }
+    
+    .step-text {
+      color: #6B7280;
+    }
+    
+    .expand-button {
+      background: none;
+      border: none;
+      color: #2563EB;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 8px;
+    }
+    
+    .tip-box {
+      background: #FEF3C7;
+      border: 1px solid #F59E0B;
+      border-radius: 4px;
+      padding: 8px 12px;
+      margin-bottom: 12px;
+    }
+    
+    .tip-title {
+      color: #92400E;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .tip-text {
+      color: #92400E;
+      font-size: 14px;
+    }
+    
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .time-info {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: #6B7280;
+      font-size: 14px;
+    }
+    
+    .action-button {
+      background: #2563EB;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 10px;
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .action-button:hover {
+      background: #1D4ED8;
+    }
+    
+    .action-button.completed {
+      background: #10B981;
+    }
+    
+    .achievement-badge {
+      background: #FBBF24;
+      color: #FFFFFF;
+      border-radius: 20px;
+      padding: 4px 8px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    /* 底部导航栏 */
+    .tabbar {
+      background: #FFFFFF;
+      border-top: 1px solid #E5E7EB;
+      padding: 8px 0;
+    }
+    
+    .tabbar-inner {
+      display: flex;
+      justify-content: space-around;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    
+    .tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: #6B7280;
+      font-size: 12px;
+      padding: 8px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    
+    .tab.active {
+      color: #2563EB;
+    }
+    
+    .tab .icon {
+      font-size: 20px;
+      margin-bottom: 2px;
+    }
+    
+    .tab .label {
+      font-size: 10px;
+    }
+    
+    /* 响应式设计 */
+    @media (max-width: 375px) {
+      .main-content {
+        padding: 12px;
+      }
+      
+      .progress-card {
+        padding: 16px;
+      }
+      
+      .training-card {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- 顶部导航栏 -->
+    <div class="topbar">
+      <div class="topbar-inner">
+        <button class="icon-btn">←</button>
+        <div class="title">训练计划</div>
+        <button class="icon-btn">✎</button>
+      </div>
+    </div>
+
+    <!-- 主内容区域 -->
+    <div class="main-content">
+      <!-- 标签切换区域 -->
+      <div class="tab-container">
+        <button class="tab-button">今日</button>
+        <button class="tab-button active">本周</button>
+        <button class="tab-button">自定义</button>
+      </div>
+
+      <!-- 进度概览卡片 -->
+      <div class="progress-card">
+        <div class="progress-header">
+          <div class="level-badge">进阶学习者</div>
+          <div class="progress-circle">60%</div>
+        </div>
+        <div class="progress-text">本周累计完成 <strong>3/5</strong> 次训练</div>
+      </div>
+
+      <!-- 训练卡片列表 -->
+      <div class="training-list">
+        <!-- 训练卡片 1 -->
+        <div class="training-card active">
+          <div class="card-header">
+            <div class="training-title">间歇爆发力训练</div>
+            <div class="achievement-badge">🏆</div>
+          </div>
+          <div class="training-duration">约 15 分钟</div>
+          
+          <div class="training-steps">
+            <div class="step-item">
+              <span class="step-number">1.</span>
+              <span class="step-text">热身：原地高抬腿30秒</span>
+            </div>
+            <div class="step-item">
+              <span class="step-number">2.</span>
+              <span class="step-text">主训练：3组×(跳绳1分钟+休息30秒)，重点控制手腕发力</span>
+            </div>
+            <button class="expand-button">↓ 展开 (1 更多步骤)</button>
+          </div>
+          
+          <div class="tip-box">
+            <div class="tip-title">💡 动作改进重点：</div>
+            <div class="tip-text">本次训练需刻意减小跳跃高度</div>
+          </div>
+          
+          <div class="card-footer">
+            <div class="time-info">⏱️ 约 15 分钟</div>
+            <button class="action-button completed">已完成</button>
+          </div>
+        </div>
+
+        <!-- 训练卡片 2 -->
+        <div class="training-card">
+          <div class="card-header">
+            <div class="training-title">耐力持续训练</div>
+            <div class="achievement-badge">⭐</div>
+          </div>
+          <div class="training-duration">约 20 分钟</div>
+          
+          <div class="training-steps">
+            <div class="step-item">
+              <span class="step-number">1.</span>
+              <span class="step-text">热身：动态拉伸5分钟</span>
+            </div>
+            <div class="step-item">
+              <span class="step-number">2.</span>
+              <span class="step-text">主训练：连续跳绳10分钟，保持匀速</span>
+            </div>
+            <button class="expand-button">↓ 展开 (2 更多步骤)</button>
+          </div>
+          
+          <div class="tip-box">
+            <div class="tip-title">💡 动作改进重点：</div>
+            <div class="tip-text">保持均匀呼吸节奏，避免前脚过快</div>
+          </div>
+          
+          <div class="card-footer">
+            <div class="time-info">⏱️ 约 20 分钟</div>
+            <button class="action-button">开始训练</button>
+          </div>
+        </div>
+
+        <!-- 训练卡片 3 -->
+        <div class="training-card">
+          <div class="card-header">
+            <div class="training-title">协调性强化训练</div>
+            <div class="achievement-badge">☆☆</div>
+          </div>
+          <div class="training-duration">约 12 分钟</div>
+          
+          <div class="training-steps">
+            <div class="step-item">
+              <span class="step-number">1.</span>
+              <span class="step-text">热身：关节活动3分钟</span>
+            </div>
+            <div class="step-item">
+              <span class="step-number">2.</span>
+              <span class="step-text">主训练：交替单脚跳练习</span>
+            </div>
+            <button class="expand-button">↓ 展开 (1 更多步骤)</button>
+          </div>
+          
+          <div class="tip-box">
+            <div class="tip-title">💡 动作改进重点：</div>
+            <div class="tip-text">注意落地时膝盖微屈，保护关节</div>
+          </div>
+          
+          <div class="card-footer">
+            <div class="time-info">⏱️ 约 12 分钟</div>
+            <button class="action-button">开始训练</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 历史训练日历入口 -->
+       <div style="text-align: center; margin-top: 16px;">
+         <button class="tab-button" style="background: #F3F4F6; border: none;">
+           📅 查看历史训练日历
+         </button>
+       </div>
+     </div>
+
+    <!-- 底部导航（严格还原 Figma） -->
+    <div class="tabbar">
+      <div class="tabbar-inner" aria-label="底部导航">
+        <a class="tab" href="/home-figma.html" aria-label="首页">
+          <div class="icon" aria-hidden="true"><img src="/icons/nav-home.svg" alt="" /></div>
+          <span class="label">首页</span>
+        </a>
+        <a class="tab" href="/analysis-figma.html" aria-label="分析">
+          <div class="icon" aria-hidden="true"><img src="/icons/nav-analysis.svg" alt="" /></div>
+          <span class="label">分析</span>
+        </a>
+        <a class="tab active" href="/plan-figma.html" aria-label="计划">
+          <div class="icon" aria-hidden="true"><img src="/icons/nav-plan.svg" alt="" /></div>
+          <span class="label">计划</span>
+        </a>
+        <a class="tab" href="/data-figma.html" aria-label="数据">
+          <div class="icon" aria-hidden="true"><img src="/icons/nav-data.svg" alt="" /></div>
+          <span class="label">数据</span>
+        </a>
+        <a class="tab" href="/achievements-figma.html" aria-label="成就" data-dot="true">
+          <div class="icon" aria-hidden="true"><img src="/icons/nav-achievements.svg" alt="" /></div>
+          <span class="label">成就</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 标签切换功能
+    const tabButtons = document.querySelectorAll('.tab-button');
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        
+        // 根据选中的标签更新内容
+        const tabText = button.textContent.trim();
+        updateTrainingContent(tabText);
+      });
+    });
+
+    // 展开/收起训练步骤
+    const expandButtons = document.querySelectorAll('.expand-button');
+    expandButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const card = button.closest('.training-card');
+        const isExpanded = card.classList.contains('expanded');
+        
+        if (isExpanded) {
+          card.classList.remove('expanded');
+          button.innerHTML = '↓ 展开 (1 更多步骤)';
+        } else {
+          card.classList.add('expanded');
+          button.innerHTML = '↑ 收起';
+        }
+      });
+    });
+
+    // 开始训练按钮功能
+    const actionButtons = document.querySelectorAll('.action-button');
+    actionButtons.forEach(button => {
+      if (!button.classList.contains('completed')) {
+        button.addEventListener('click', () => {
+          const card = button.closest('.training-card');
+          const title = card.querySelector('.training-title').textContent;
+          
+          if (confirm(`确定开始"${title}"训练吗？`)) {
+            button.textContent = '训练中...';
+            button.disabled = true;
+            
+            // 模拟训练过程
+            setTimeout(() => {
+              button.textContent = '已完成';
+              button.classList.add('completed');
+              button.disabled = false;
+              
+              // 更新进度
+              updateProgress();
+            }, 3000);
+          }
+        });
+      }
+    });
+
+    // 更新训练内容（根据标签）
+    function updateTrainingContent(tab) {
+      const progressText = document.querySelector('.progress-text');
+      const trainingCards = document.querySelectorAll('.training-card');
+      
+      switch(tab) {
+        case '今日':
+          progressText.innerHTML = '今日累计完成 <strong>1/2</strong> 次训练';
+          trainingCards.forEach((card, index) => {
+            if (index === 0) card.classList.add('active');
+            else card.classList.remove('active');
+          });
+          break;
+        case '本周':
+          progressText.innerHTML = '本周累计完成 <strong>3/5</strong> 次训练';
+          trainingCards.forEach((card, index) => {
+            if (index === 0) card.classList.add('active');
+            else card.classList.remove('active');
+          });
+          break;
+        case '自定义':
+          progressText.innerHTML = '自定义计划 <strong>0/3</strong> 次训练';
+          trainingCards.forEach(card => card.classList.add('active'));
+          break;
+      }
+    }
+
+    // 更新进度
+    function updateProgress() {
+      const completedCards = document.querySelectorAll('.action-button.completed');
+      const totalCards = document.querySelectorAll('.action-button').length;
+      const progressCircle = document.querySelector('.progress-circle');
+      const progressText = document.querySelector('.progress-text');
+      
+      const progress = Math.round((completedCards.length / totalCards) * 100);
+      progressCircle.textContent = `${progress}%`;
+      progressText.innerHTML = `本周累计完成 <strong>${completedCards.length}/${totalCards}</strong> 次训练`;
+    }
+
+    // 页面加载时检查登录状态
+    document.addEventListener('DOMContentLoaded', function() {
+      const user = localStorage.getItem('user');
+      if (!user) {
+        window.location.href = 'login-figma.html';
+      }
+    });
+  </script>
+</body>
+</html>
