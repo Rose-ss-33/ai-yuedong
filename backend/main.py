@@ -15,9 +15,11 @@ import base64
 from datetime import datetime
 
 app = FastAPI()
+origins_env = os.environ.get("ALLOW_ORIGINS", "*")
+allow_origins = ["*"] if origins_env.strip() == "*" else [o.strip() for o in origins_env.split(",") if o.strip()]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://10.223.72.65:3000"],
+    allow_origins=allow_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
